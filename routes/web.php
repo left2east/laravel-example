@@ -11,3 +11,7 @@ Route::get('/test', [TestController::class, 'index']);
 Route::get('/info', function () {
     phpinfo();die;
 });
+
+Route::get('/test/first', [TestController::class, 'first']);
+Route::get('/test/second', [TestController::class, 'second']);
+Route::get('/test/third', [TestController::class, 'third']);
