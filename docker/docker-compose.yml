@@ -1,6 +1,6 @@
 services:
   laravel-nginx-service:
-    image: swr.cn-north-4.myhuaweicloud.com/official/5i5j-pc-web
+    image: registry.cn-hangzhou.aliyuncs.com/zedaliyun/nginx:1.25.4
     ports:
       - "80:80"
     volumes:
@@ -8,13 +8,17 @@ services:
       - ./nginx/conf.d/:/etc/nginx/conf.d/
       - ../:/var/www/html/
     depends_on:
-      - laravel-php-service
-  laravel-php-service:
-    build:
-      context: .
-      dockerfile: ./php/Dockerfile
+      - laravel-php-fpm-service
+  laravel-php-fpm-service:
+    image: registry.cn-hangzhou.aliyuncs.com/zedaliyun/php-fpm:8.2.27
     volumes:
       - ./php/php.ini:/usr/local/etc/php/php.ini
       - ./php/php-fpm.conf:/usr/local/etc/php-fpm.conf
       - ./php/php-fpm.d/:/usr/local/etc/php-fpm.d/
+      - ../:/var/www/html/
+  laravel-command-service:
+    image: registry.cn-hangzhou.aliyuncs.com/zedaliyun/php-fpm:8.2.27
+    command: php artisan schedule:work
+    volumes:
+      - ./php/php.ini:/usr/local/etc/php/php.ini
       - ../:/var/www/html/
